@@ -50,3 +50,21 @@ Use Blue Team's Discord channel, one short weekly meeting at an agreed time, and
 
 **Submission:** Put the approved section in the team README. Kevin submits a Word document with the repository URL by September 13. Verify instructor access and the announcement's repository/wiki visibility requirements with the team.
 
+
+### September 9 planning update — Kevin Thrush
+
+Christian supports the side-scroller proposal and Unreal 5.7 and volunteered for 3D level/background work in Blender. Abby supports the concept and volunteered for pickups/UI. Jason provided his GitHub username. These are recorded preferences, not approval of every task below.
+
+| Member | Proposed responsibility | First task — by Sept 13 |
+|---|---|---|
+| Kevin Thrush | Coordination, repository integration, player movement/camera | Maintain plan and task list; confirm project setup and exact engine patch before creating the shared project. |
+| Christian Gulley | Environment art and level layout | Sketch the factory route and a small reusable prop list; coordinate scale with Kevin before importing Blender assets. |
+| Abby Mckenzie | Pickups and UI | Outline health/shield/speed pickups, power-cell counter, and a simple HUD. |
+| Jason Elias | Stationary and moving hazards (proposed; preference pending) | Pick a first hazard to prototype and note its damage/timing behavior. |
+| Adam Havens | QA and progression testing (proposed; preference pending) | Confirm availability and outline checks for spawn, collectibles, exit, and restart. |
+
+All first tasks are To Do until the owner reports completion. Everyone playtests; QA is shared, with Adam proposed to organize the checklist. Roles are open to swaps. Implementation starts after the shared project and engine patch are agreed. Christian's suggested boss remains a stretch goal after required features are complete; it is not part of the committed scope.
+
+GitHub write-access invitations sent to ciaro88, AbbyMckenzie, and JasonEliasSNHU on September 9; acceptance pending. Adam's username is still needed. Repository: https://github.com/kptmail-game/GAM305-DigitalGameDev
+
+For this week's planning, use asynchronous Discord updates so nobody is blocked by meeting availability. Please confirm/swap roles and share the exact installed 5.7 patch by Friday, September 11; aim to finalize the README Saturday, September 12, ahead of Sunday's submission. A recurring meeting time remains to be agreed. Updates should state completed work, next task, and any blocker.
