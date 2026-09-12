@@ -2,13 +2,13 @@
 
 Team planning repository for GAM-305-10947-M01, August-October 2026.
 
-Proposed engine: Unreal Engine 5.7; exact patch and team agreement pending.
+Proposed common engine: Unreal Engine 5.7.4; remaining version checks are listed below.
 No Unreal project has been added yet. Install Git LFS before cloning game assets.
 Use feature branches and coordinate changes to shared maps and binary assets.
 ## Module Two Team Project Plan
 
-**Status:** Draft for Blue Team discussion, not yet approved by the team.
-**Kevin Thrush — proposed plan:**
+**Status:** Module Two planning record, compiled September 12. Team input and remaining setup decisions are recorded below.
+**Compiled by Kevin Thrush with team input documented below.**
 
 ### Game and four additional elements
 
@@ -35,36 +35,58 @@ Later milestone dates follow the module schedule and remain subject to instructo
 
 ### Roles and communication
 
-Divide gameplay programming, level design, art, and UI/testing based on member preferences. One member also coordinates the repository and documentation. **Owners are pending team discussion.** Kevin has offered to organize decisions and the schedule.
+| Member | Work area |
+|---|---|
+| Kevin Thrush | Coordination, repository integration, player movement and camera |
+| Christian Gulley | Factory layout, low-poly background and props; role accepted |
+| Abby Mckenzie | Pickups and UI, following her volunteered preference |
+| Jason Elias | Hazards, accepted; moving hazards proposed as his specific portion |
+| Adam Havens | Stationary hazards, explicitly accepted; initial design supplied |
 
-Use Blue Team's Discord channel, one short weekly meeting at an agreed time, and midweek/pre-deadline progress updates. Report blockers promptly. Track tasks in To Do / In Progress / Done, with an owner, deadline, and completion check for each. Use feature branches and coordinate edits to shared Unreal maps/assets.
+Everyone helps playtest. The working communication plan is Blue Team Discord with short Wednesday and Saturday updates covering completed work, next tasks, and blockers. Report blocking issues promptly; arrange a voice call when needed rather than holding up work for attendance. Kevin maintains the task list. Each task has an owner, due date, completion check, and To Do / In Progress / Done status. Coordinate shared map edits and use feature branches for implementation.
 
-### Team input to record before submission
+### Brainstorming and named contributions
 
-- Each member's suggestions and the final agreed game/features.
-- Role owners, exact Unreal version, repository URL/host, and setup owner.
-- Meeting day/time and agreement on the task-reporting method.
-- Final decisions and actual contributions labeled with each member's name.
+This log was compiled by Kevin Thrush on September 12 from the team's Discord discussion. It records planning contributions, not completed game implementation.
 
-**Setup note:** The rubric says to start blank and build player/camera functionality; the announcement recommends a starter template. Plan for blank unless clarified.
+- **Kevin Thrush:** Proposed the abandoned-factory side-scroller, four extra feature categories, milestone schedule, communication/task tracking approach, low-poly style, and work split. Created the public repository, configured Unreal ignore/LFS rules, invited teammates, and compiled this README and submission link document.
+- **Christian Gulley:** Supported the side-scroller concept, volunteered and accepted environment work in Blender, asked about low- versus mid-poly art, and confirmed Unreal 5.7.4. Suggested a boss whose behavior changes with collected powerups. The boss is retained as a stretch idea after required features; it is outside the baseline scope. Christian also provided positive feedback on Adam's hazard design.
+- **Abby Mckenzie:** Supported the proposed game, volunteered pickups and UI based on previous coursework, shared availability, and confirmed Unreal 5.7.4.
+- **Jason Elias:** Accepted the proposed hazards responsibility and reported Unreal 5.7.1. Kevin proposed moving hazards as his portion after Adam volunteered stationary hazards; that specific split can still be adjusted.
+- **Adam Havens:** Offered hazards/pickup support, confirmed Unreal 5.7.4, accepted stationary hazards, and supplied a design for all four stationary hazard types on September 12.
 
-**Submission:** Put the approved section in the team README. Kevin submits a Word document with the repository URL by September 13. Verify instructor access and the announcement's repository/wiki visibility requirements with the team.
+### Stationary hazard design from Adam Havens
 
+- Spikes: overlap detection and damage, with optional knockback. Keep the baseline spikes fixed; retracting spikes are optional.
+- Electrical panel: repeated damage while the player overlaps; stop the timer on exit and use sparks/light to communicate the powered state.
+- Steam vent: alternate safe and damaging bursts, with a warning before activation. Damage values and intervals will be tuned during testing.
+- Slowing floor: reduce movement speed while overlapping and restore it after exit.
 
-### September 9 planning update — Kevin Thrush
+**Kevin Thrush — integration notes:** Use one shared player damage path so shields and health UI behave consistently. The slowing floor and speed pickup should combine through shared movement modifiers rather than restoring an outdated saved speed. Test exiting/re-entering each hazard and player death so damage timers cannot continue incorrectly.
 
-Christian supports the side-scroller proposal and Unreal 5.7 and volunteered for 3D level/background work in Blender. Abby supports the concept and volunteered for pickups/UI. Jason provided his GitHub username. These are recorded preferences, not approval of every task below.
+### Current task status and next milestone
 
-| Member | Proposed responsibility | First task — by Sept 13 |
-|---|---|---|
-| Kevin Thrush | Coordination, repository integration, player movement/camera | Maintain plan and task list; confirm project setup and exact engine patch before creating the shared project. |
-| Christian Gulley | Environment art and level layout | Sketch the factory route and a small reusable prop list; coordinate scale with Kevin before importing Blender assets. |
-| Abby Mckenzie | Pickups and UI | Outline health/shield/speed pickups, power-cell counter, and a simple HUD. |
-| Jason Elias | Stationary and moving hazards (proposed; preference pending) | Pick a first hazard to prototype and note its damage/timing behavior. |
-| Adam Havens | QA and progression testing (proposed; preference pending) | Confirm availability and outline checks for spawn, collectibles, exit, and restart. |
+| Owner | Task | Due | Status and completion check |
+|---|---|---|---|
+| Kevin | Repository, team log, and submission document | Sept 13 | Repository and log prepared; document links to the public README |
+| Adam | Outline four stationary hazards | Sept 13 | Done as a design draft in Discord; implementation remains To Do |
+| Christian | Factory route sketch and reusable prop list | Sept 13 | To Do; not yet reported complete |
+| Abby | Pickup and HUD outline | Sept 13 | To Do; not yet reported complete |
+| Jason | First moving-hazard design | Sept 13 | To Do; not yet reported complete |
+| Kevin and team | Shared project setup, movement/camera prototype, QA plan | Sept 20 | To Do; verify consistent engine patch, player movement, camera, and test checklist |
 
-All first tasks are To Do until the owner reports completion. Everyone playtests; QA is shared, with Adam proposed to organize the checklist. Roles are open to swaps. Implementation starts after the shared project and engine patch are agreed. Christian's suggested boss remains a stretch goal after required features are complete; it is not part of the committed scope.
+The first art/UI/hazard outlines are internal planning targets. The Module Two submission is the repository link and this collaborative planning record; no completed playable build is claimed this week.
 
-GitHub write-access invitations sent to ciaro88, AbbyMckenzie, and JasonEliasSNHU on September 9; acceptance pending. Adam's username is still needed. Repository: https://github.com/kptmail-game/GAM305-DigitalGameDev
+### Repository access and setup
 
-For this week's planning, use asynchronous Discord updates so nobody is blocked by meeting availability. Please confirm/swap roles and share the exact installed 5.7 patch by Friday, September 11; aim to finalize the README Saturday, September 12, ahead of Sunday's submission. A recurring meeting time remains to be agreed. Updates should state completed work, next task, and any blocker.
+Repository: https://github.com/kptmail-game/GAM305-DigitalGameDev
+
+The repository is public for instructor viewing. All four teammates have accepted collaborator access, verified September 12: ciaro88, AbbyMckenzie, JasonEliasSNHU, and Aj8644.
+
+Unreal 5.7.4 is the proposed common patch, based on Christian, Abby, and Adam's installed versions. Jason last reported 5.7.1 and has been asked whether updating is possible; Kevin's exact patch remains to be verified. Confirm the common patch before sharing the Unreal project. This setup item remains open and does not change the planned feature scope.
+
+Start with a blank project and custom player/camera functionality to follow the rubric; seek clarification if the starter-template recommendation is needed. No Unreal project or game assets have been added yet.
+
+### Submission
+
+Each member submits a Word document containing the repository URL by September 13. The shared document is available in submissions/Module_Two_Project_Log.docx. Named contributions are recorded above for individual credit. Team members should flag corrections to their contributions or the working plan in Discord.
