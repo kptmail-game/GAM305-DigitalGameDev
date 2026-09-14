@@ -3,8 +3,10 @@
 Team planning repository for GAM-305-10947-M01, August-October 2026.
 
 Proposed common engine: Unreal Engine 5.7.4; remaining version checks are listed below.
-No Unreal project has been added yet. Install Git LFS before cloning game assets.
+The `codex/week3-prototype` branch includes an Unreal 5.7.4 movement/camera prototype; see [prototype setup and checks](PROTOTYPE.md). Install Git LFS before cloning game assets.
 Use feature branches and coordinate changes to shared maps and binary assets.
+
+**September 14 development update — Kevin Thrush:** Built the custom movement/camera prototype and placeholder test map on a separate branch. Ten runtime assertions passed. Keyboard playtesting and a teammate's clean build remain pending. Kevin's installed patch is confirmed as 5.7.4. The Module Two section below is the historical planning record.
 ## Module Two Team Project Plan
 
 **Status:** Module Two planning record, compiled September 12. Team input and remaining setup decisions are recorded below.
