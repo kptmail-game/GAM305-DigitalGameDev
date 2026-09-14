@@ -90,3 +90,63 @@ Start with a blank project and custom player/camera functionality to follow the 
 ### Submission
 
 Each member submits a Word document containing the repository URL by September 13. The shared document is available in submissions/Module_Two_Project_Log.docx. Named contributions are recorded above for individual credit. Team members should flag corrections to their contributions or the working plan in Discord.
+
+## Module Three Project Log - Team Development: QA and Testing Plan
+
+**Kevin Thrush — proposed QA plan, September 14, 2026.** Team review is pending. This records planned testing; no tests are claimed as completed.
+
+### Communication and collaboration
+
+Use Blue Team Discord for questions and Wednesday/Saturday updates. Keep the shared plan in this README, with each person's additions credited by name. Members can suggest edits in Discord or a GitHub pull request; Kevin will compile them and flag unresolved decisions. Use GitHub Issues for bugs so reports remain searchable and linked to fixes. Blocking problems should be reported immediately.
+
+### Testing process and schedule
+
+Test each object in a small test area first, then test it in the level with other systems, and finally play the whole game from launch to completion. The author checks their feature before integration; another member checks it afterward. Record the tester, date, engine version, commit/build, test IDs, and pass/fail results. Mark unavailable features Not Run rather than passing them.
+
+| Stage and target | Test procedure and completion check |
+|---|---|
+| Play Test — preproduction/prototype, Sept 14–20 | Check movement, jumping, camera, collision, and the proposed route with simple placeholder objects. Try normal actions and edge cases such as jumping at platform edges. Record problems with controls and readability before adding detail. Unbuilt features remain Not Run. |
+| Demo — before the Alpha presentation, Sept 21–27 | Run object checks, then complete the demo route from a fresh start. Check that each required feature category is represented and the objective is understandable. Fix crashes and progression blockers before presenting; list unfinished variants and remaining defects. No marketing demo is scheduled, so use the Alpha presentation as our demo checkpoint. |
+| Beta regression — Sept 28–Oct 4 | Run the full checklist with all feature variants and textures. Have a teammate unfamiliar with a section play it without guidance, time the full run, and check interactions between pickups and hazards. Retest fixes and neighboring systems. |
+| Code Release — Oct 5–11, before final submission | Test the release candidate against the complete checklist from a clean checkout on another teammate's machine using the agreed engine version. Check required assets, launch, restart, and a complete run. Compare results with the demo and Beta bugs. Release only after required tests pass and crashes/progression blockers are resolved; document any remaining minor defects. |
+
+Wednesday updates identify failures and owners. Saturday reviews prioritize fixes and update the log. Repeat affected tests after every relevant change, even between these checkpoints.
+
+### Pass and fail checklist
+
+Record Pass or Fail for each executed check and attach an issue number for failures. Use Not Run until a check can actually be performed. For rows with several variants, record a separate result for every variant.
+
+| ID | Item and pass condition | Initial result |
+|---|---|---|
+| QA01 | Clean checkout opens in the agreed Unreal version without missing project assets or compile errors. | Not Run |
+| QA02 | Player spawns on safe ground, moves left/right, jumps and lands reliably, and stays in the intended movement plane. | Not Run |
+| QA03 | Camera follows the player and keeps upcoming platforms/hazards visible without exposing areas outside the level. | Not Run |
+| QA04 | Platforms, walls, and props have appropriate collision; the route has no unintended gaps or places where the player becomes stuck. | Not Run |
+| QA05 | Each of four power cells can be collected once; the count stays accurate. The exit rejects fewer than four and completes the level with all four. | Not Run |
+| QA06 | Health pickup increases health without exceeding its maximum and cannot be collected repeatedly after removal. | Not Run |
+| QA07 | Shield pickup prevents the intended damage for its agreed duration and expires correctly; normal damage resumes afterward. | Not Run |
+| QA08 | Speed pickup applies the agreed boost and expires correctly. Entering/leaving slowing floors during the boost cannot leave speed permanently changed. | Not Run |
+| QA09 | Spikes damage only on valid contact. Electrical panels damage only while in range. Steam warns before harmful bursts and is safe between bursts. Slowing floors restore the correct speed on exit. Test each separately. | Not Run |
+| QA10 | Sliding press, swinging arm, and moving electrical barrier follow their intended paths/cycles and damage only on valid contact. Test each separately. | Not Run |
+| QA11 | Health, shield state, power-cell count, and completion feedback match actual gameplay state; text remains readable. | Not Run |
+| QA12 | Leaving a hazard, dying, or restarting clears damage timers and temporary effects. Restart restores the agreed initial health, collectibles, and level state. | Not Run |
+| QA13 | Full level has a clear spawn and goal, consistent factory theme, textured visible surfaces, all required variants, and a roughly 5–10 minute first completion. Record actual time. | Not Run |
+| QA14 | Complete runs on team machines have no crashes or sustained stalls that prevent play; record hardware, settings, and observed performance issues. | Not Run |
+
+Proposed coverage follows work areas: Kevin checks movement/camera and progression; Christian checks layout/art/collision; Abby checks pickups/UI; Adam checks stationary hazards; Jason checks moving hazards if he confirms that split. Everyone performs a full playthrough and checks at least one feature they did not create.
+
+### Updating the plan
+
+When a design or implementation change is proposed, its owner identifies the affected test IDs. Update expected behavior, add edge cases, and note the date, author, reason, and related issue/commit in the README or pull request. Kevin checks that the design notes and checklist agree before integrating the change. Keep old test results tied to their original builds, and rerun affected tests plus a brief launch-to-exit check on the new build. Set exact pickup durations and damage values in the design notes before judging those values as pass/fail.
+
+### Reporting and tracking bugs
+
+Create one GitHub Issue per reproducible bug. Include a short title, reporter/date, engine and build/commit, affected test ID, map/object, numbered reproduction steps, expected result, actual result, and frequency. Add a screenshot or video when useful. If a bug is intermittent, include the last actions taken and how many attempts reproduced it.
+
+Prioritize blockers (crash or cannot finish), major problems (required feature broken), then minor visual/audio issues. Assign an owner and follow Open → In Progress → Ready to Retest → Closed using an issue checklist or comments. Link the fixing commit/pull request to the issue. A second tester repeats the original steps and related checks, recording the result and build. Close only after verification; reopen the same issue if the defect returns. GitHub issue comments and commit history preserve changes over time. Review open bugs Wednesday and Saturday.
+
+### Named contributions
+
+- **Kevin Thrush:** Drafted the testing process, milestone schedule, pass/fail checklist, plan-update procedure, and bug reporting/tracking workflow on September 14.
+- Team additions and reviews will be credited as received. Adam's previously shared stationary-hazard outline informed the proposed hazard checks; it is not recorded as a new Week 3 contribution or a completed test.
+
