@@ -6,6 +6,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Materials/MaterialInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "FactoryElement.h"
+#include "EngineUtils.h"
 
 AFactoryCharacter::AFactoryCharacter()
 {
@@ -42,6 +45,8 @@ void AFactoryCharacter::BeginPlay()
     if (auto* Material = LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/Prototype/M_Player.M_Player")))
         PlaceholderBody->SetMaterial(0,Material);
     GetCharacterMovement()->SetPlaneConstraintOrigin(SpawnLocation);
+    bAlphaMode = GetWorld()->GetMapName().Contains(TEXT("Alpha"));
+    StatusMessage = TEXT("Factory closed. Find four power cells to power the emergency exit.");
 }
 
 void AFactoryCharacter::Tick(float DeltaSeconds)
@@ -50,12 +55,26 @@ void AFactoryCharacter::Tick(float DeltaSeconds)
     // Independent camera height prevents abrupt vertical jumps while traversing platforms.
     SideCamera->SetWorldLocation(FVector(GetActorLocation().X, SpawnLocation.Y+CameraDistance, SpawnLocation.Z+CameraHeight));
     SideCamera->SetWorldRotation(FRotator(0,-90,0));
-    if (GetActorLocation().Z < -500.f) RestartPrototype();
+    if (bAlphaMode)
+    {
+        if (!bWon && !bDead) RunTime += DeltaSeconds;
+        ShieldRemaining = FMath::Max(0.f, ShieldRemaining-DeltaSeconds);
+        SpeedRemaining = FMath::Max(0.f, SpeedRemaining-DeltaSeconds);
+        DamageCooldown = FMath::Max(0.f, DamageCooldown-DeltaSeconds);
+        for (auto It=SlowingSources.CreateIterator(); It; ++It) if (!It->IsValid()) It.RemoveCurrent();
+        GetCharacterMovement()->MaxWalkSpeed = 500.f * (SpeedRemaining>0 ? 1.5f : 1.f) * (SlowingSources.Num()>0 ? .45f : 1.f);
+        if (GetActorLocation().Z < -500.f && !bWon && !bDead)
+        {
+            Health=0; bDead=true; StatusMessage=TEXT("Robot offline. Press R to restart.");
+            GetCharacterMovement()->DisableMovement();
+        }
+    }
+    else if (GetActorLocation().Z < -500.f) RestartPrototype();
 }
 
 void AFactoryCharacter::MoveHorizontal(float Value)
 {
-    AddMovementInput(FVector::ForwardVector, Value);
+    if (!bWon && !bDead) AddMovementInput(FVector::ForwardVector, Value);
 }
 
 void AFactoryCharacter::RestartPrototype()
@@ -64,6 +83,39 @@ void AFactoryCharacter::RestartPrototype()
     GetCharacterMovement()->StopMovementImmediately();
     SetActorLocation(SpawnLocation, false, nullptr, ETeleportType::TeleportPhysics);
     GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+    if (bAlphaMode)
+    {
+        Health=100; PowerCells=0; bWon=false; bDead=false;
+        ShieldRemaining=0; SpeedRemaining=0; DamageCooldown=0; RunTime=0;
+        SlowingSources.Empty(); GetCharacterMovement()->MaxWalkSpeed=500;
+        StatusMessage=TEXT("Factory closed. Find four power cells to power the emergency exit.");
+        for (TActorIterator<AFactoryElement> It(GetWorld()); It; ++It) It->ResetElement();
+    }
+}
+
+void AFactoryCharacter::ApplyFactoryDamage(float Amount)
+{
+    if (bWon || bDead || Amount<=0 || ShieldRemaining>0 || DamageCooldown>0) return;
+    Health=FMath::Clamp(Health-Amount,0.f,100.f); DamageCooldown=.8f;
+    if (Health<=0) { bDead=true; StatusMessage=TEXT("Robot offline. Press R to restart."); GetCharacterMovement()->DisableMovement(); }
+}
+void AFactoryCharacter::AddPowerCell()
+{
+    if (bWon || bDead) return;
+    PowerCells=FMath::Min(4,PowerCells+1);
+    StatusMessage=PowerCells==4 ? TEXT("All cells collected. Reach the green emergency exit!") : TEXT("Power cell collected.");
+}
+void AFactoryCharacter::AddHealth(float Amount) { if (!bDead && !bWon) Health=FMath::Clamp(Health+FMath::Max(0.f,Amount),0.f,100.f); }
+void AFactoryCharacter::GiveShield(float Duration) { if (!bDead && !bWon) ShieldRemaining=FMath::Max(ShieldRemaining,Duration); }
+void AFactoryCharacter::GiveSpeed(float Duration) { if (!bDead && !bWon) SpeedRemaining=FMath::Max(SpeedRemaining,Duration); }
+void AFactoryCharacter::SetSlowingSource(AActor* Source, bool bInside) { if (bInside) SlowingSources.Add(Source); else SlowingSources.Remove(Source); }
+bool AFactoryCharacter::TryExit()
+{
+    if (bDead) return false;
+    if (PowerCells<4) { StatusMessage=FString::Printf(TEXT("Exit needs four cells. You have %d."),PowerCells); return false; }
+    bWon=true; StatusMessage=TEXT("Emergency exit powered. You escaped! Press R to play again.");
+    GetCharacterMovement()->StopMovementImmediately(); GetCharacterMovement()->DisableMovement();
+    return true;
 }
 
 void AFactoryCharacter::SetupPlayerInputComponent(UInputComponent* Input)

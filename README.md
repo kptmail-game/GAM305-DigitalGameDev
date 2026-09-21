@@ -2,11 +2,11 @@
 
 Team planning repository for GAM-305-10947-M01, August-October 2026.
 
-Proposed common engine: Unreal Engine 5.7.4; remaining version checks are listed below.
-The `codex/week3-prototype` branch includes an Unreal 5.7.4 movement/camera prototype; see [prototype setup and checks](PROTOTYPE.md). Install Git LFS before cloning game assets.
-Use feature branches and coordinate changes to shared maps and binary assets.
+**Latest work:** [Module Four in-progress log](#module-four-project-log---team-reflection), September 21. The Module Two and Three sections below preserve their submitted history.
 
-**September 14 development update — Kevin Thrush:** Built the custom movement/camera prototype and placeholder test map on a separate branch. Ten runtime assertions passed. Keyboard playtesting and a teammate's clean build remain pending. Kevin's installed patch is confirmed as 5.7.4. The Module Two section below is the historical planning record.
+Proposed common engine: Unreal Engine 5.7.4; remaining version checks are listed below.
+The Unreal project is available on the development branches linked below. Install Git LFS before cloning game assets.
+Use feature branches and coordinate changes to shared maps and binary assets.
 ## Module Two Team Project Plan
 
 **Status:** Module Two planning record, compiled September 12. Team input and remaining setup decisions are recorded below.
@@ -95,7 +95,7 @@ Each member submits a Word document containing the repository URL by September 1
 
 ## Module Three Project Log - Team Development: QA and Testing Plan
 
-**Kevin Thrush — proposed QA plan, September 14, 2026.** Team review is pending. This records planned testing; no tests are claimed as completed.
+**Compiled by Kevin Thrush, September 19, 2026, from the QA draft and Blue Team contributions.** The plan below separates completed prototype checks, teammate-reported results, and tests still to be run. This is the Week 3 submission record; game integration continues toward Alpha.
 
 ### Communication and collaboration
 
@@ -108,7 +108,7 @@ Test each object in a small test area first, then test it in the level with othe
 | Stage and target | Test procedure and completion check |
 |---|---|
 | Play Test — preproduction/prototype, Sept 14–20 | Check movement, jumping, camera, collision, and the proposed route with simple placeholder objects. Try normal actions and edge cases such as jumping at platform edges. Record problems with controls and readability before adding detail. Unbuilt features remain Not Run. |
-| Demo — before the Alpha presentation, Sept 21–27 | Run object checks, then complete the demo route from a fresh start. Check that each required feature category is represented and the objective is understandable. Fix crashes and progression blockers before presenting; list unfinished variants and remaining defects. No marketing demo is scheduled, so use the Alpha presentation as our demo checkpoint. |
+| Demo — before the Alpha presentation, Sept 21–27 | Run object checks, then complete the demo route from a fresh start. Following Sara Wade's feedback, deliver a complete playable game from start to finish, including required mechanics, an understandable objective, working win/lose/restart behavior, and a tested route. Placeholder geometry is acceptable. Fix crashes and progression blockers before presenting; track remaining polish and defects. Apply the same complete-playthrough expectation to Beta. No marketing demo is scheduled, so use the Alpha presentation as our demo checkpoint. |
 | Beta regression — Sept 28–Oct 4 | Run the full checklist with all feature variants and textures. Have a teammate unfamiliar with a section play it without guidance, time the full run, and check interactions between pickups and hazards. Retest fixes and neighboring systems. |
 | Code Release — Oct 5–11, before final submission | Test the release candidate against the complete checklist from a clean checkout on another teammate's machine using the agreed engine version. Check required assets, launch, restart, and a complete run. Compare results with the demo and Beta bugs. Release only after required tests pass and crashes/progression blockers are resolved; document any remaining minor defects. |
 
@@ -147,8 +147,68 @@ Create one GitHub Issue per reproducible bug. Include a short title, reporter/da
 
 Prioritize blockers (crash or cannot finish), major problems (required feature broken), then minor visual/audio issues. Assign an owner and follow Open → In Progress → Ready to Retest → Closed using an issue checklist or comments. Link the fixing commit/pull request to the issue. A second tester repeats the original steps and related checks, recording the result and build. Close only after verification; reopen the same issue if the defect returns. GitHub issue comments and commit history preserve changes over time. Review open bugs Wednesday and Saturday.
 
+### Week 3 results and current build
+
+The checklist above defines full acceptance criteria. Its initial Not Run column is retained as the baseline; the narrower executed checks below do not imply that every part of a checklist row has passed. The shared prototype is on [codex/week3-prototype](https://github.com/kptmail-game/GAM305-DigitalGameDev/tree/codex/week3-prototype), latest published commit `70ea565`. It is a movement/camera blockout, not a complete Alpha build.
+
+| Tester and date | Check and result | Limits and follow-up |
+|---|---|---|
+| Kevin Thrush, Sept 14 | Ten runtime assertions passed: safe landing, left/right movement, movement plane, restart position, jump ascent/landing, camera tracking/direction, and fall reset. | Function/physics checks in Unreal 5.7.4; not a complete gameplay acceptance test. |
+| Christian Gulley, Sept 17 | Reported Pass for traversing the current route, reaching platforms by jumping, no sticking on current floors/platforms, and side-camera readability. | Exact tested commit not supplied. Covers parts of QA02–QA04; final props and hazard spacing remain pending. |
+| Abby Mckenzie, Sept 16–17 | Reported Pass for placing a power cell in her map, starting Play, walking into it, and collecting it. | Local feature test only. Four-cell counting, duplicate prevention, UI synchronization, and exit behavior in the shared project remain Not Run. |
+| Kevin Thrush, Sept 19 | Downloaded Abby's ZIP and verified its file list includes BP_PowerCell, WBP_HUD, Content, Config, and the project descriptor. | File inventory only; no archive code executed, gameplay test performed, or integration claimed. |
+
+**Open bug:** Christian reported that the player briefly appeared black, then yellow after contacting a wall; after restarting it stayed yellow. This is recorded as [Issue 1](https://github.com/kptmail-game/GAM305-DigitalGameDev/issues/1), awaiting reproduction. Kevin handles triage; Christian can supply a screenshot, exact build, and steps if it recurs. No fix has been verified.
+
+**Still Not Run in the shared build:** pickup effects and UI, four-cell progression and exit, stationary/moving hazard behavior, interactions and reset state, full timed playthrough, and final release/clean-checkout checks. These remain open work toward Alpha, not reasons to delay the Week 3 QA-plan submission. As of the September 19 review, no new hazard branch or files had been received from Adam or Jason; the remote repository contained main and the prototype branch.
+
+### Instructor feedback and plan update
+
+Sara Wade requested a defined player and motivation and emphasized complete playable Alpha/Beta builds with early, repeated playtests. Kevin proposed a maintenance robot left behind in a closed factory, gathering four power cells to power the emergency exit and escape. Christian supported the idea on September 18; other responses are still welcome. This is the working premise, with placeholder geometry permitted during development. Store meshes/textures can support the theme while the team creates its own gameplay logic, level layout, and mechanics.
+
+Kevin updated the demo completion criteria above on September 19. Each integrated feature will receive an object test, an interaction check, and a full-route regression check when the complete route exists. Aim for at least a short 15-minute team playtest each development week. Prioritize a working beginning, objective, hazards, ending, and restart before cosmetic polish.
+
 ### Named contributions
 
-- **Kevin Thrush:** Drafted the testing process, milestone schedule, pass/fail checklist, plan-update procedure, and bug reporting/tracking workflow on September 14.
-- Team additions and reviews will be credited as received. Adam's previously shared stationary-hazard outline informed the proposed hazard checks; it is not recorded as a new Week 3 contribution or a completed test.
+- **Kevin Thrush:** Drafted and compiled the QA process, milestone schedule, acceptance checklist, change procedure, and bug workflow; developed the shared movement/camera prototype and shaded blockout; recorded ten runtime assertions; coordinated file handoffs and Saturday review; incorporated instructor feedback and opened the visual bug report.
+- **Christian Gulley:** Tested the current prototype and supplied four Pass results with two pending checks; reported the intermittent player-color issue; shared a factory-route sketch and reusable prop suggestions; supported the robot premise. Final prop collision and hazard-spacing tests remain pending.
+- **Abby Mckenzie:** Developed a power-cell pickup in her separate project and supplied its local collection test steps/results; shared the project ZIP on September 18, including pickup and HUD assets. Shared-project integration and UI behavior have not yet been verified.
+- **Adam Havens:** Previously supplied the stationary-hazard design that informed QA09. No new Week 3 test report or implementation files were available at compilation; his earlier design is not counted as a newly completed Week 3 test.
+- **Jason Elias:** Hazard responsibility was previously accepted. No new Week 3 test report or implementation files were available at compilation; moving-hazard implementation/testing remains pending.
+
+### Submission and next handoff
+
+The Word submission document is [Module Three Project Log](submissions/Module_Three_Project_Log.docx). Each member submits their own copy through 3-2 Project Log. The shared README preserves named contributions so the record does not imply equal or unverified work. Kevin can integrate incoming feature files after review, then request another teammate's test of the combined build. Later contributions and test results will be added as dated updates rather than changing the history of this submission.
+
+
+
+## Module Four Project Log - Team Reflection
+
+**In progress, September 21, 2026. Compiled by Kevin Thrush. This is not the final Alpha submission.**
+
+The shared integration build is on [codex/week4-alpha](https://github.com/kptmail-game/GAM305-DigitalGameDev/tree/codex/week4-alpha). See [build setup and testing instructions](ALPHA_INTEGRATION.md). The original movement prototype is preserved alongside the new AlphaIntegration map.
+
+### Work and testing so far
+
+Kevin implemented shared health, power-cell counting, timed shield/speed effects, slowing-floor interaction, exit gating, death/restart, and a status display. A separate shaded test map contains provisional versions of the three pickups, four cells, four stationary hazards, three moving hazards, and exit. These are integration placeholders written by Kevin, not a claim that teammates' assets have been merged.
+
+On September 21, the project compiled in Unreal 5.7.4. Eighteen automated state checks passed for damage/cooldown, pickup effects, speed/slow interaction, cell counting, exit gating, and reset/death behavior. The original ten movement/camera/physics checks also passed. A rendered 1280 x 720 screenshot was reviewed for HUD readability. These checks do not establish complete collision, hazard timing, full-route playability, performance, or a 5–10 minute completion time; those acceptance checks remain pending.
+
+### Team input and handoffs
+
+- **Kevin Thrush:** Shared systems and provisional integration map; compilation, automated checks, visual HUD review, integration instructions, and coordination.
+- **Christian Gulley:** Earlier route sketch and prototype testing inform the layout plan. Requested Week 4 work: factory layout/props and route/collision checks. New Week 4 files and results pending.
+- **Abby Mckenzie:** Previously supplied pickup/HUD project ZIP and a local pickup result. Shared-project integration remains pending; no combined-build result is claimed.
+- **Adam Havens:** Earlier stationary-hazard design informs the provisional behavior. Week 4 implementation files and test results pending.
+- **Jason Elias:** Hazard files and Week 4 results pending; moving-hazard handoff requested.
+
+### Reflection and next steps
+
+Kevin's observation: a common player interface and small repeatable checks make it easier to test health, pickups, and exit behavior together. Separate project handoffs have delayed integration; local pickup success alone does not prove the combined game works. Ask for the exact branch, map, dependencies, and brief test results with each handoff, and test on the common build earlier.
+
+The team's initial design identified interacting hazards and timed pickups, so the shared damage path and combined speed modifiers specifically address those interactions. Discord remains useful for quick status and file coordination; GitHub branches preserve testable revisions and Issues preserve bug reports. A ZIP handoff is less useful until its required assets are reviewed and integrated. Other members' tool/process reflections have been requested and will be credited when received.
+
+No previously reported gameplay bug is marked fixed by these new checks. [Issue 1](https://github.com/kptmail-game/GAM305-DigitalGameDev/issues/1), the intermittent player-color report, remains awaiting reproduction.
+
+Updates requested Wednesday, ready files Friday evening, integration and retesting Saturday, submission by Sunday September 27. Before releasing Alpha: test every hazard and pickup through actual contact, complete the full route, verify win/death/restart, collect named team results, and check a clean checkout. The compact integration route needs layout and pacing work to meet the planned 5–10 minute game. Prioritize all required mechanics and a complete playable loop before polish. Beta remains targeted for October 4, subject to findings from the Alpha playtests. Final Alpha release branch and team reflection are pending these checks.
 

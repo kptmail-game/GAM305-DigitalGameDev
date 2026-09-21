@@ -19,4 +19,6 @@ private:
     float HighestJump = 0.f;
     FVector TestStart;
     void CheckPrototype(bool bPassed, const TCHAR* Name);
+    bool bAlphaTest=false;
+    void RunAlphaChecks(class AFactoryCharacter* Player);
 };

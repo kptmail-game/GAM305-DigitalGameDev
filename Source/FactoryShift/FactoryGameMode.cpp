@@ -7,6 +7,9 @@
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
 #include "UnrealClient.h"
+#include "FactoryElement.h"
+#include "Components/BoxComponent.h"
+#include "EngineUtils.h"
 AFactoryGameMode::AFactoryGameMode()
 {
     DefaultPawnClass = AFactoryCharacter::StaticClass();
@@ -19,7 +22,8 @@ void AFactoryGameMode::BeginPlay()
     Super::BeginPlay();
     bPrototypeTest = FParse::Param(FCommandLine::Get(), TEXT("PrototypeTest"));
     bPrototypeCapture = FParse::Param(FCommandLine::Get(), TEXT("PrototypeCapture"));
-    SetActorTickEnabled(bPrototypeTest || bPrototypeCapture);
+    bAlphaTest = FParse::Param(FCommandLine::Get(), TEXT("AlphaTest"));
+    SetActorTickEnabled(bPrototypeTest || bPrototypeCapture || bAlphaTest);
 }
 
 void AFactoryGameMode::CheckPrototype(bool bPassed, const TCHAR* Name)
@@ -42,13 +46,14 @@ void AFactoryGameMode::Tick(float DeltaSeconds)
         if (StageTime > 5.f) FPlatformMisc::RequestExitWithStatus(false,0);
         return;
     }
-    if (!bPrototypeTest) return;
+    if (!bPrototypeTest && !bAlphaTest) return;
     auto* Player = Cast<AFactoryCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
     if (!Player)
     {
         if (StageTime > 5.f) { CheckPrototype(false,TEXT("player spawned")); FPlatformMisc::RequestExitWithStatus(false,1); }
         return;
     }
+    if(bAlphaTest) { if(StageTime>1.f) RunAlphaChecks(Player); return; }
     switch (TestStage)
     {
     case 0:
@@ -105,5 +110,40 @@ void AFactoryGameMode::Tick(float DeltaSeconds)
         }
         break;
     }
+}
+
+void AFactoryGameMode::RunAlphaChecks(AFactoryCharacter* P)
+{
+    auto Check=[this](bool Pass,const TCHAR* Name) { UE_LOG(LogTemp,Display,TEXT("ALPHA_TEST %s: %s"),Pass?TEXT("PASS"):TEXT("FAIL"),Name); bTestFailed|=!Pass; };
+    Check(P->bAlphaMode,TEXT("Alpha map activates gameplay state"));
+    Check(P->Health==100 && P->PowerCells==0,TEXT("fresh health and cell count"));
+    Check(!P->TryExit() && !P->bWon,TEXT("exit rejects missing cells"));
+    P->ApplyFactoryDamage(20); Check(P->Health==80,TEXT("damage reduces health"));
+    P->ApplyFactoryDamage(20); Check(P->Health==80,TEXT("damage cooldown prevents every-frame damage"));
+    P->AddHealth(100); Check(P->Health==100,TEXT("repair capped at maximum"));
+    P->RestartPrototype(); P->GiveShield(.1f); P->ApplyFactoryDamage(20);
+    Check(P->Health==100,TEXT("shield blocks damage"));
+    P->Tick(.2f); P->ApplyFactoryDamage(20); Check(P->Health==80,TEXT("normal damage resumes after shield expires"));
+    P->RestartPrototype(); P->GiveSpeed(.5f); P->SetSlowingSource(this,true); P->Tick(.1f);
+    Check(FMath::IsNearlyEqual(P->GetCharacterMovement()->MaxWalkSpeed,337.5f),TEXT("boost combines with slow floor"));
+    P->SetSlowingSource(this,false); P->Tick(.1f);
+    Check(P->GetCharacterMovement()->MaxWalkSpeed==750,TEXT("leaving slow floor preserves active boost"));
+    P->Tick(.5f); Check(P->GetCharacterMovement()->MaxWalkSpeed==500,TEXT("boost expiry restores base speed"));
+    TArray<AFactoryElement*> Cells; int32 Types[12]={0};
+    for(TActorIterator<AFactoryElement> It(GetWorld());It;++It) { Types[(int32)It->Kind]++; if(It->Kind==EFactoryElementKind::Cell) Cells.Add(*It); }
+    Check(Cells.Num()==4,TEXT("level contains exactly four power cells"));
+    bool All=true; for(int32 N:Types) All&=N>0; Check(All,TEXT("all pickup hazard and exit categories placed"));
+    if(Cells.Num()==4)
+    {
+        Cells[0]->Interact(P); Cells[0]->Interact(P); Check(P->PowerCells==1,TEXT("cell cannot be collected twice"));
+        for(int32 I=1;I<4;++I) Cells[I]->Interact(P);
+        Check(P->PowerCells==4 && P->TryExit() && P->bWon,TEXT("four cells unlock win condition"));
+    }
+    P->RestartPrototype(); bool Reset=true; for(auto* C:Cells) Reset&=!C->bCollected;
+    Check(P->Health==100 && P->PowerCells==0 && !P->bWon && Reset,TEXT("restart restores player and collectibles"));
+    P->ApplyFactoryDamage(100); Check(P->bDead && !P->TryExit(),TEXT("death prevents winning"));
+    P->RestartPrototype(); Check(!P->bDead && P->ShieldRemaining==0 && P->SpeedRemaining==0,TEXT("restart clears death and effects"));
+    UE_LOG(LogTemp,Display,TEXT("ALPHA_TEST_COMPLETE %s"),bTestFailed?TEXT("FAIL"):TEXT("PASS"));
+    FPlatformMisc::RequestExitWithStatus(false,bTestFailed?1:0); SetActorTickEnabled(false);
 }
 
