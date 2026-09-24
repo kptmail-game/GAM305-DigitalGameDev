@@ -46,6 +46,26 @@ void AFactoryCharacter::BeginPlay()
         PlaceholderBody->SetMaterial(0,Material);
     GetCharacterMovement()->SetPlaneConstraintOrigin(SpawnLocation);
     bAlphaMode = GetWorld()->GetMapName().Contains(TEXT("Alpha"));
+    if (bAlphaMode)
+    {
+        PlaceholderBody->SetRelativeScale3D(FVector(.55f,.45f,.65f));
+        struct FPart { const TCHAR* Name; FVector Location; FVector Scale; const TCHAR* Material; };
+        const FPart Parts[]={
+            {TEXT("RobotHead"),FVector(0,0,46),FVector(.48f,.46f,.3f),TEXT("/Game/Prototype/M_Player.M_Player")},
+            {TEXT("RobotVisor"),FVector(0,25,48),FVector(.34f,.06f,.12f),TEXT("/Game/Alpha/M_Light.M_Light")},
+            {TEXT("LeftFoot"),FVector(-17,0,-50),FVector(.2f,.5f,.35f),TEXT("/Game/Alpha/M_Trim.M_Trim")},
+            {TEXT("RightFoot"),FVector(17,0,-50),FVector(.2f,.5f,.35f),TEXT("/Game/Alpha/M_Trim.M_Trim")},
+            {TEXT("LeftArm"),FVector(-38,0,0),FVector(.15f,.3f,.5f),TEXT("/Game/Alpha/M_Pipe.M_Pipe")},
+            {TEXT("RightArm"),FVector(38,0,0),FVector(.15f,.3f,.5f),TEXT("/Game/Alpha/M_Pipe.M_Pipe")}};
+        for (const FPart& Part:Parts)
+        {
+            auto* PartMesh=NewObject<UStaticMeshComponent>(this,Part.Name);
+            PartMesh->SetupAttachment(RootComponent); PartMesh->SetStaticMesh(PlaceholderBody->GetStaticMesh());
+            PartMesh->SetRelativeLocation(Part.Location); PartMesh->SetRelativeScale3D(Part.Scale);
+            PartMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+            PartMesh->SetMaterial(0,LoadObject<UMaterialInterface>(nullptr,Part.Material)); PartMesh->RegisterComponent();
+        }
+    }
     StatusMessage = TEXT("Factory closed. Find four power cells to power the emergency exit.");
 }
 
@@ -126,4 +146,3 @@ void AFactoryCharacter::SetupPlayerInputComponent(UInputComponent* Input)
     Input->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
     Input->BindAction("Restart", IE_Pressed, this, &AFactoryCharacter::RestartPrototype);
 }
-

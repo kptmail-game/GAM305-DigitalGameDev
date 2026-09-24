@@ -2,7 +2,7 @@
 
 Team planning repository for GAM-305-10947-M01, August-October 2026.
 
-**Latest work:** [Module Four in-progress log](#module-four-project-log---team-reflection), September 21. The Module Two and Three sections below preserve their submitted history.
+**Latest log:** [Module Four Alpha and team reflection](#module-four-project-log---team-reflection), September 24. The Module Two and Three sections below preserve their submitted history.
 
 Proposed common engine: Unreal Engine 5.7.4; remaining version checks are listed below.
 The Unreal project is available on the development branches linked below. Install Git LFS before cloning game assets.
@@ -184,31 +184,57 @@ The Word submission document is [Module Three Project Log](submissions/Module_Th
 
 ## Module Four Project Log - Team Reflection
 
-**In progress, September 21, 2026. Compiled by Kevin Thrush. This is not the final Alpha submission.**
+**Compiled by Kevin Thrush, September 24, 2026, using the named contributions below.**
 
-The shared integration build is on [codex/week4-alpha](https://github.com/kptmail-game/GAM305-DigitalGameDev/tree/codex/week4-alpha). See [build setup and testing instructions](ALPHA_INTEGRATION.md). The original movement prototype is preserved alongside the new AlphaIntegration map.
+Alpha source: [Final-Alpha](https://github.com/kptmail-game/GAM305-DigitalGameDev/tree/Final-Alpha). Git does not allow spaces in branch names; Final-Alpha is the repository branch corresponding to the rubric's “Final Alpha.” The repository is public for instructor access. [Word submission document](submissions/Module_Four_Project_Log.docx).
 
-### Work and testing so far
+### Alpha status and testing
 
-Kevin implemented shared health, power-cell counting, timed shield/speed effects, slowing-floor interaction, exit gating, death/restart, and a status display. A separate shaded test map contains provisional versions of the three pickups, four cells, four stationary hazards, three moving hazards, and exit. These are integration placeholders written by Kevin, not a claim that teammates' assets have been merged.
+The Alpha contains a playable start-to-finish loop in Maps/AlphaIntegration. A maintenance robot collects four power cells to power the emergency exit while encountering three pickup types, four stationary hazards, and three moving hazards. Health, temporary effects, cell count, exit gating, death, and restart are connected. The visual pass adds a simple robot, factory props/signs, brighter animated cell models, objective direction/distance, and a health bar. Kevin implemented the shared systems and stand-in actors; these do not represent merged teammate implementation files.
 
-On September 21, the project compiled in Unreal 5.7.4. Eighteen automated state checks passed for damage/cooldown, pickup effects, speed/slow interaction, cell counting, exit gating, and reset/death behavior. The original ten movement/camera/physics checks also passed. A rendered 1280 x 720 screenshot was reviewed for HUD readability. These checks do not establish complete collision, hazard timing, full-route playability, performance, or a 5–10 minute completion time; those acceptance checks remain pending.
+| Tester and date | Result | Scope |
+|---|---|---|
+| Christian Gulley, Sept 23 | Map opened in Unreal 5.7.4; readable route; no major floor/wall collision blocker in the area tested. | Teammate-reported test on codex/week4-alpha, exact commit not supplied. Full objective was not confirmed because cells were difficult to find. |
+| Christian Gulley, Sept 23 | Player stayed yellow; earlier color change did not recur. | A non-reproduction result, not proof that the intermittent issue is fixed. |
+| Kevin Thrush, Sept 24 | Built the updated editor project and standalone Windows package. Completed an automated run using normal movement, jumping, collision, and pickup/exit overlaps: four cells, exit reached alive at 80 health, then successful reset. | No teleportation, invulnerability, or direct cell-award calls in the route test. About 21 seconds of simulated route time; this is not a first-time human pacing result. |
+| Kevin Thrush, Sept 21 | 18 shared-state assertions and 10 movement/camera assertions passed. | Baseline checks; individual hazard timing/fairness and final human acceptance still need broader testing. |
 
-### Team input and handoffs
+The game remains a compact Alpha. It is below our intended 5–10 minute play length, uses simple geometry, and has no finished audio. The complete loop works in the tested build, but full human playthroughs and performance checks across team machines remain pending. See ALPHA_INTEGRATION.md for exact setup and test commands.
 
-- **Kevin Thrush:** Shared systems and provisional integration map; compilation, automated checks, visual HUD review, integration instructions, and coordination.
-- **Christian Gulley:** Earlier route sketch and prototype testing inform the layout plan. Requested Week 4 work: factory layout/props and route/collision checks. New Week 4 files and results pending.
-- **Abby Mckenzie:** Previously supplied pickup/HUD project ZIP and a local pickup result. Shared-project integration remains pending; no combined-build result is claimed.
-- **Adam Havens:** Earlier stationary-hazard design informs the provisional behavior. Week 4 implementation files and test results pending.
-- **Jason Elias:** Hazard files and Week 4 results pending; moving-hazard handoff requested.
+### What went well
 
-### Reflection and next steps
+Christian's specific pass/pending notes and screenshot made his test useful: they separated working route/collision behavior from the unverified cell objective. Kevin's state tests checked interactions such as a speed boost combined with a slowing floor, and the full-route test then exercised real collection and exit overlaps. This caught the distinction between functioning code and a feature teammates can actually find and use.
 
-Kevin's observation: a common player interface and small repeatable checks make it easier to test health, pickups, and exit behavior together. Separate project handoffs have delayed integration; local pickup success alone does not prove the combined game works. Ask for the exact branch, map, dependencies, and brief test results with each handoff, and test on the common build earlier.
+### Bugs and corrections
 
-The team's initial design identified interacting hazards and timed pickups, so the shared damage path and combined speed modifiers specifically address those interactions. Discord remains useful for quick status and file coordination; GitHub branches preserve testable revisions and Issues preserve bug reports. A ZIP handoff is less useful until its required assets are reviewed and integrated. Other members' tool/process reflections have been requested and will be credited when received.
+Christian reported poor cell visibility. Kevin enlarged the cells into animated yellow cylinders, added objective markers and direction/distance guidance, and improved label readability. Local collection-to-exit testing passed after the change; Christian's retest remains requested. His screenshot appeared to lack gameplay actors, suggesting an older compiled module or incomplete handoff, but that cause is not confirmed on his machine. Rebuild instructions and a standalone Windows build reduce that setup dependency.
 
-No previously reported gameplay bug is marked fixed by these new checks. [Issue 1](https://github.com/kptmail-game/GAM305-DigitalGameDev/issues/1), the intermittent player-color report, remains awaiting reproduction.
+The first packaged visual check revealed a missing robot material; Kevin corrected the packaging asset list. Visual inspection also revealed poorly oriented/dark signs, which were corrected before publication. These findings show why checking the actual packaged output matters beyond compiling the editor project. The earlier player-color report remains [Issue 1](https://github.com/kptmail-game/GAM305-DigitalGameDev/issues/1); Christian could not reproduce it on Sept 23, but no confirmed root-cause fix is claimed.
 
-Updates requested Wednesday, ready files Friday evening, integration and retesting Saturday, submission by Sunday September 27. Before releasing Alpha: test every hazard and pickup through actual contact, complete the full route, verify win/death/restart, collect named team results, and check a clean checkout. The compact integration route needs layout and pacing work to meet the planned 5–10 minute game. Prioritize all required mechanics and a complete playable loop before polish. Beta remains targeted for October 4, subject to findings from the Alpha playtests. Final Alpha release branch and team reflection are pending these checks.
+### What we would do differently
 
+Kevin would distribute a reproducible playable build earlier, request its exact revision with each report, and have another member attempt the full objective immediately. That would expose missing actors or unclear pickups sooner. Christian recommended making pickups stand out with bright colors, labels, glow, or an icon and offered to retest. Keep the checklist's Not Run state for untested behavior instead of treating one local pass as coverage of the entire game.
+
+### Tools and team approach
+
+Unreal Play mode helped Christian inspect the route and collision. GitHub branches keep source versions identifiable, Issues retain bug history, and Discord supports quick questions, screenshots, and handoffs. The team's early scope analysis identified interacting pickups and hazards, which led to shared damage/effect logic and a checklist organized by feature. Christian's layout observations and Adam's earlier hazard design informed those checks.
+
+Separate project/ZIP handoffs have been less effective than a shared tested revision: Abby's initial descriptor did not include assets, and the later ZIP has not been integrated. Automated state checks alone were also insufficient for visual clarity or teammate setup. Combining them with a rendered build and human testing gives better coverage. These are Kevin's process conclusions plus Christian's documented feedback; no unreceived reflection is attributed to another member.
+
+### Named contributions
+
+- **Kevin Thrush:** Shared movement/camera and gameplay systems; provisional pickup/hazard actors; Alpha map and visual improvements; build/package checks and full-route automation; test documentation, coordination, and this compiled log.
+- **Christian Gulley:** Sept 23 Alpha map/route/collision test, screenshot, cell-visibility finding and improvement suggestions, and follow-up that the player-color issue did not recur. His earlier sketch and prop suggestions informed the environment direction.
+- **Abby Mckenzie:** Previously supplied a separate pickup/HUD project and local cell test. No new Week 4 report was available as of Sept 24; shared integration remains pending and is not claimed complete.
+- **Adam Havens:** Earlier stationary-hazard design informed the provisional implementation. No new Week 4 implementation files or test report were available as of Sept 24.
+- **Jason Elias:** Previously accepted hazard work. No new Week 4 implementation files or test report were available as of Sept 24.
+
+### Schedule through Beta
+
+The current Alpha is available ahead of the Sept 27 deadline. Friday evening remains the requested handoff for any remaining files; Saturday is reserved for optional team retests and corrections to this record. These later contributions can be added without claiming they were present in this snapshot.
+
+For Beta due Oct 4: review available assets and refine the route Sept 28–29; extend pacing and improve hazard readability Sept 30–Oct 1; collect timed human runs and fix blockers Oct 2–3; verify the release Oct 4. Keep required mechanics and a complete playable loop ahead of optional decoration. If incoming files remain unavailable, continue improving the working shared implementation and preserve accurate contribution credits.
+
+![Alpha gameplay preview](docs/alpha-preview.png)
+
+[Download the Windows Alpha build](https://github.com/kptmail-game/GAM305-DigitalGameDev/releases/tag/alpha-week4). Extract the whole ZIP and launch FactoryShift.exe. No editor or C++ build is required for this download.

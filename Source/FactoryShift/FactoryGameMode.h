@@ -20,5 +20,8 @@ private:
     FVector TestStart;
     void CheckPrototype(bool bPassed, const TCHAR* Name);
     bool bAlphaTest=false;
+    bool bAlphaRouteTest=false;
+    float RouteTime=0.f;
+    void RunAlphaRoute(class AFactoryCharacter* Player, float DeltaSeconds);
     void RunAlphaChecks(class AFactoryCharacter* Player);
 };

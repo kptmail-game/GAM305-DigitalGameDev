@@ -2,6 +2,8 @@
 #include "Engine/Canvas.h"
 #include "FactoryCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "FactoryElement.h"
+#include "EngineUtils.h"
 void AFactoryHUD::DrawHUD()
 {
     Super::DrawHUD();
@@ -14,6 +16,19 @@ void AFactoryHUD::DrawHUD()
         DrawText(FString::Printf(TEXT("Health: %.0f    Cells: %d/4    Shield: %.1fs    Speed: %.1fs    Time: %.0fs"),Player->Health,Player->PowerCells,Player->ShieldRemaining,Player->SpeedRemaining,Player->RunTime),FLinearColor(.5f,.9f,1),26,48*Scale,nullptr,1.15f*Scale);
         DrawText(TEXT("A/D or arrows: move    Space: jump    R: restart    Yellow cells power the green exit"),FLinearColor::White,26,73*Scale,nullptr,1.f*Scale);
         DrawText(Player->StatusMessage,FLinearColor(1,.85f,.4f),26,96*Scale,nullptr,1.f*Scale);
+        DrawRect(FLinearColor(.08f,.12f,.15f,1),26,128*Scale,180*Scale,7*Scale);
+        DrawRect(FLinearColor(.2f,.85f,.65f,1),26,128*Scale,180*Scale*Player->Health/100.f,7*Scale);
+        AFactoryElement* Nearest=nullptr; float Distance=MAX_flt; int32 CellActors=0;
+        for(TActorIterator<AFactoryElement> It(GetWorld());It;++It)
+        {
+            if(It->Kind==EFactoryElementKind::Cell) ++CellActors;
+            const bool Target=Player->PowerCells<4 ? It->Kind==EFactoryElementKind::Cell && !It->bCollected : It->Kind==EFactoryElementKind::Exit;
+            const float D=FMath::Abs(It->GetActorLocation().X-Player->GetActorLocation().X);
+            if(Target && D<Distance) { Nearest=*It; Distance=D; }
+        }
+        const FString Hint=CellActors!=4 ? TEXT("Gameplay assets missing: close editor, rebuild project, then reopen original map.") : Nearest ? FString::Printf(TEXT("%s  %s  %.0fm"),Player->PowerCells<4?TEXT("POWER CELL"):TEXT("EXIT"),Nearest->GetActorLocation().X>Player->GetActorLocation().X?TEXT(">>"):TEXT("<<"),Distance/100.f) : TEXT("");
+        DrawRect(FLinearColor(.015f,.025f,.045f,.94f),16,Canvas->SizeY-52,Canvas->SizeX-32,36);
+        DrawText(Hint,FLinearColor(1,.85f,.35f),28,Canvas->SizeY-44,nullptr,1.15f*Scale);
         if (Player->bWon || Player->bDead)
         {
             DrawRect(FLinearColor(.015f,.02f,.03f,.94f),Canvas->SizeX*.2f,Canvas->SizeY*.42f,Canvas->SizeX*.6f,100*Scale);

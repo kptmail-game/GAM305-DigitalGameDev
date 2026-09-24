@@ -23,7 +23,8 @@ void AFactoryGameMode::BeginPlay()
     bPrototypeTest = FParse::Param(FCommandLine::Get(), TEXT("PrototypeTest"));
     bPrototypeCapture = FParse::Param(FCommandLine::Get(), TEXT("PrototypeCapture"));
     bAlphaTest = FParse::Param(FCommandLine::Get(), TEXT("AlphaTest"));
-    SetActorTickEnabled(bPrototypeTest || bPrototypeCapture || bAlphaTest);
+    bAlphaRouteTest = FParse::Param(FCommandLine::Get(), TEXT("AlphaRouteTest"));
+    SetActorTickEnabled(bPrototypeTest || bPrototypeCapture || bAlphaTest || bAlphaRouteTest);
 }
 
 void AFactoryGameMode::CheckPrototype(bool bPassed, const TCHAR* Name)
@@ -38,6 +39,12 @@ void AFactoryGameMode::Tick(float DeltaSeconds)
     StageTime += DeltaSeconds;
     if (bPrototypeCapture)
     {
+        if(StageTime>1.f && TestStage==0)
+        {
+            float CaptureX=0.f;
+            if(FParse::Value(FCommandLine::Get(),TEXT("CaptureX="),CaptureX))
+                if(auto* P=UGameplayStatics::GetPlayerCharacter(this,0)) P->SetActorLocation(FVector(CaptureX,0,100));
+        }
         if (StageTime > 3.f && TestStage == 0)
         {
             FScreenshotRequest::RequestScreenshot(TEXT("PrototypePreview.png"),true,false);
@@ -46,13 +53,14 @@ void AFactoryGameMode::Tick(float DeltaSeconds)
         if (StageTime > 5.f) FPlatformMisc::RequestExitWithStatus(false,0);
         return;
     }
-    if (!bPrototypeTest && !bAlphaTest) return;
+    if (!bPrototypeTest && !bAlphaTest && !bAlphaRouteTest) return;
     auto* Player = Cast<AFactoryCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
     if (!Player)
     {
         if (StageTime > 5.f) { CheckPrototype(false,TEXT("player spawned")); FPlatformMisc::RequestExitWithStatus(false,1); }
         return;
     }
+    if(bAlphaRouteTest) { if(StageTime>1.f) RunAlphaRoute(Player,DeltaSeconds); return; }
     if(bAlphaTest) { if(StageTime>1.f) RunAlphaChecks(Player); return; }
     switch (TestStage)
     {
@@ -110,6 +118,32 @@ void AFactoryGameMode::Tick(float DeltaSeconds)
         }
         break;
     }
+}
+
+void AFactoryGameMode::RunAlphaRoute(AFactoryCharacter* P, float Dt)
+{
+    RouteTime+=Dt;
+    if(P->bWon || P->bDead || RouteTime>90.f)
+    {
+        const bool Pass=P->bWon && P->PowerCells==4 && !P->bDead;
+        UE_LOG(LogTemp,Display,TEXT("ALPHA_ROUTE %s: normal movement and overlap, cells=%d health=%.0f time=%.1f x=%.0f"),Pass?TEXT("PASS"):TEXT("FAIL"),P->PowerCells,P->Health,RouteTime,P->GetActorLocation().X);
+        P->RestartPrototype();
+        bool Reset=P->PowerCells==0 && P->Health==100 && !P->bWon && !P->bDead;
+        for(TActorIterator<AFactoryElement> It(GetWorld());It;++It) Reset &= !It->bCollected;
+        UE_LOG(LogTemp,Display,TEXT("ALPHA_ROUTE_RESTART %s"),Reset?TEXT("PASS"):TEXT("FAIL"));
+        FPlatformMisc::RequestExitWithStatus(false,Pass&&Reset?0:1); SetActorTickEnabled(false); return;
+    }
+    AFactoryElement* Target=nullptr; float SmallestX=MAX_flt;
+    for(TActorIterator<AFactoryElement> It(GetWorld());It;++It)
+    {
+        bool Desired=P->PowerCells<4 ? It->Kind==EFactoryElementKind::Cell && !It->bCollected : It->Kind==EFactoryElementKind::Exit;
+        if(Desired && It->GetActorLocation().X<SmallestX) { Target=*It; SmallestX=It->GetActorLocation().X; }
+    }
+    if(!Target) return;
+    float Dx=Target->GetActorLocation().X-P->GetActorLocation().X;
+    P->MoveHorizontal(FMath::Abs(Dx)>20.f?FMath::Sign(Dx):0.f);
+    if(FMath::Abs(Dx)<280.f && P->GetCharacterMovement()->IsMovingOnGround()) P->Jump();
+    else P->StopJumping();
 }
 
 void AFactoryGameMode::RunAlphaChecks(AFactoryCharacter* P)

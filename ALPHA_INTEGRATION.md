@@ -34,3 +34,11 @@ For reproducibility, launch UnrealEditor-Cmd with the project path and `/Game/Ma
 ## Before the final Alpha handoff
 
 Integrate incoming work, test all required variants, finish and time the route, verify the goal and reset, and compile named team reflections. Friday evening is the requested file handoff; Saturday is integration/retesting. The final release branch will be created only after the release checks. Git branch names cannot contain spaces, so `Final-Alpha` can represent the rubric's “Final Alpha” label in the submission notes.
+
+## September 24 release and missing-actor troubleshooting
+
+The default map now opens AlphaIntegration. The Final-Alpha branch is the Alpha snapshot; codex/week4-alpha remains the development branch. A Windows ZIP is published with the GitHub Alpha release so testers do not need Visual Studio or Unreal Editor. Extract the entire ZIP before launching FactoryShift.exe. Keep the Engine and FactoryShift folders beside it.
+
+If the editor shows only floor/wall/CellStep objects, close Unreal and rebuild FactoryShiftEditor (Development Editor / Win64) after fetching the latest branch and Git LFS files. Reopen the original map from the repository. Do not save a map with missing-class warnings over the shared version. Preserve any local edits before restoring a source file. The cells are actors named PowerCell1 through PowerCell4; CellStep is just their platform. Christian's missing-actor cause is not yet confirmed, so report any load/compile error rather than assuming it is the same problem.
+
+New checks: -AlphaRouteTest drives the player using movement/jump input logic through actual cell and exit overlaps, without teleporting or awarding items. It verifies four cells, win while alive, and reset. This is an automated route check, not a human pacing or fairness test. The short route still needs expansion toward 5–10 minutes for Beta.
