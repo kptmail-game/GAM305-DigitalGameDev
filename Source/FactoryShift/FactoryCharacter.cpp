@@ -45,7 +45,8 @@ void AFactoryCharacter::BeginPlay()
     if (auto* Material = LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/Prototype/M_Player.M_Player")))
         PlaceholderBody->SetMaterial(0,Material);
     GetCharacterMovement()->SetPlaneConstraintOrigin(SpawnLocation);
-    bAlphaMode = GetWorld()->GetMapName().Contains(TEXT("Alpha"));
+    // Gameplay maps are identified by their actors, so renamed Beta maps retain the full game loop.
+    bAlphaMode = bool(TActorIterator<AFactoryElement>(GetWorld()));
     if (bAlphaMode)
     {
         PlaceholderBody->SetRelativeScale3D(FVector(.55f,.45f,.65f));
