@@ -244,3 +244,7 @@ For Beta due Oct 4: review available assets and refine the route Sept 28–29; e
 Kevin Thrush imported Christian Gulley's wall-panel FBX and supplied texture into Content/Team/Christian and placed eight noncolliding background panels in /Game/Maps/BetaIntegration. Christian supplied the model, texture, Blender source, and dimensions note. The Alpha map and release remain unchanged. Open BetaIntegration explicitly to inspect this work; the default map is still AlphaIntegration.
 
 Kevin also corrected gameplay initialization to detect FactoryElement actors instead of requiring Alpha in the map name. This fixes health/effects/HUD/restart on the renamed Beta map. Editor build passed; all 18 gameplay state checks passed. Normal-movement route test collected four cells, exited alive with 80 health, and passed restart. A rendered game view confirmed the panel orientation and texture. This is an integration start, not the finished Beta: route pacing and incoming teammate features remain pending.
+
+The September 29 visual pass adds directional surface shading, muted industrial colors, warmer lamp strips, and amber accents to the Beta map. Meshes and collision are unchanged, and Christian's supplied panel material is preserved. The rendered preview was checked in-game.
+
+![Beta visual preview](docs/beta-preview.png)
