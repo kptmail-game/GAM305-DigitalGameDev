@@ -248,3 +248,46 @@ Kevin also corrected gameplay initialization to detect FactoryElement actors ins
 The September 29 visual pass adds directional surface shading, muted industrial colors, warmer lamp strips, and amber accents to the Beta map. Meshes and collision are unchanged, and Christian's supplied panel material is preserved. The rendered preview was checked in-game.
 
 ![Beta visual preview](docs/beta-preview.png)
+
+
+## Module Five Project Log - Team Reflection
+
+October 3, 2026 | Blue Team | Compiled by Kevin Thrush
+
+### Beta status and technical plan
+
+Our Beta preserves a complete playable loop: move and jump through the factory, collect four power cells, avoid hazards, use repair/shield/speed pickups, and reach the exit. Death and restart reset the run. Christian's wall panels, five pipe models, and swinging-hazard model are integrated with the existing movement and damage systems. Kevin added directional surface shading and a consistent industrial palette. The Windows package uses Shipping configuration and starts in BetaIntegration.
+
+The Module Three plan's shared player and small feature divisions helped us keep a working game while separate pieces arrived. Reusing one damage/pickup interface also made repeatable tests possible. The main weakness was treating role assignments and expected delivery dates as if integration would follow automatically. Some work was built against a different player class, and some promised files were not available. Next time we would require an early feature handoff that works with the shared character, followed by short checkpoints and a named integration test for every feature.
+
+### Evaluation and changes
+
+Earlier testing led to larger power cells, clearer objective labels, a readable robot, and a standalone download that avoids editor setup problems. This week, testing found that gameplay initialization depended on Alpha being in the map name. Kevin changed it to detect gameplay actors, then retested the renamed Beta map. Christian's new props improve the factory setting without changing tested collision volumes. Abby reported that her health bar now initializes correctly, responds to damage, and adds 20 health on pickup in her own project.
+
+GitHub branches are useful, but creating a branch alone does not deliver asset changes. Adam's remote adam/hazards branch still points to the Alpha commit c3f1281 as of this review. Separate project ZIPs made handoff possible but also exposed character dependencies: Abby's HUD and pickups cast to BP_FirstPersonCharacter, while the shared game uses FactoryCharacter. Her updated source was inspected and retained locally; it is not claimed as integrated. The shared build retains its tested pickups and HUD, including its existing 35-health repair amount. Screenshots and chat updates help diagnose issues but cannot replace compatible files and a testable build.
+
+For the final week we will use smaller commits, confirm that files are actually on the remote branch, and check dependencies before promising integration. A missed handoff will be recorded as pending and will not stop a tested release. Playtest reports should identify the build, steps, expected behavior, and observed result.
+
+### Named contributions
+
+- Kevin Thrush: shared gameplay implementation, Beta integration, material/shading pass, startup-map correction, build and packaging, automated tests, coordination, and compiled reflection.
+- Christian Gulley: wall panel and texture, five pipe FBX models, swinging-hazard model, scale notes, and earlier Alpha playtest findings. His models are used in the Beta; the swinging behavior remains the shared implementation.
+- Abby Mckenzie: separate pickup/UI prototype and October 3 updated ZIP; reported testing initial health, damage display, and 20-point healing. Shared-character adaptation remains pending, so her prototype tests are not represented as combined-build results.
+- Adam Havens: stationary-hazard planning, reported steam-vent/laser work and recovery from a PC crash, and remote branch setup. No new hazard assets are present in the remote branch at this review; implementation remains pending.
+- Jason Elias: accepted moving-hazard work and reported limited progress September 27. No subsequent file handoff or update was found by the October 3 review. The Beta uses the existing shared moving hazards.
+
+### Verification and remaining limits
+
+On October 3, all 18 gameplay state checks passed, covering initial state, damage cooldown, healing cap, shield behavior, speed/slow interactions, four cells, exit gating, death, and restart. The normal-movement route collected four cells, reached the exit with 80 health in 20.9 seconds, and passed restart. The packaged Shipping executable also completed the automated route with exit code 0. The Windows Shipping build succeeded and a rendered game preview was inspected. These are automated checks and visual inspection, not a new human playtest.
+
+The route remains short. Audio, a pause menu, broader human testing, and Abby's shared-character integration remain unfinished. We are keeping these limits visible rather than presenting them as completed features.
+
+### Final release schedule
+
+- October 3-4: review and publish the Beta package and log; each member submits the direct ZIP link and required document in their own Brightspace area.
+- October 5-7: adapt ready pickup/UI work to the shared character, accept only complete hazard handoffs, and prioritize remaining playability issues.
+- October 8-9: collect human playtests and fix reproducible blockers; improve pacing only if it can be retested.
+- October 10: freeze and package the final candidate, retest the packaged game, and compile the final log.
+- October 11: final-release submission target. Optional decoration follows required gameplay and testing.
+
+Release branch label: Final-Beta (the rubric's Final Beta label, with a hyphen because Git branch names cannot contain spaces).
