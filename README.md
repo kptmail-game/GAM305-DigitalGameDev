@@ -291,3 +291,57 @@ The route remains short. Audio, a pause menu, broader human testing, and Abby's 
 - October 11: final-release submission target. Optional decoration follows required gameplay and testing.
 
 Release branch label: Final-Beta (the rubric's Final Beta label, with a hyphen because Git branch names cannot contain spaces).
+
+
+## Module Six Project Log - Team Reflection
+
+October 11, 2026 | Blue Team | Compiled by Kevin Thrush
+
+### Art plan and final scope
+
+The Module Three plan gave us a factory setting, a maintenance robot, and a clear escape objective. Kevin completed the shared stationary and moving hazard implementations, player systems, pickups, HUD, integration, and release preparation. Christian's wall panels, texture, pipes, and swinging-hazard model give the environment a more recognizable industrial identity. The final visual pass adds ribbed metal surfaces, a compact HUD, four power indicators, animated pickups, and a results panel. The existing movement and collision remain unchanged.
+
+### What went well
+
+A consistent palette helped separate the yellow power cells, green exit, and colored optional pickups from the darker machinery. Christian noted on October 5 that the level had grown from simple colors into a recognizable factory through props, hazards, color, and UI. His October 3 Beta test reported that the speed pickup and restart worked and that he found no bugs. This is a Beta test, not a test of the final package.
+
+Abby reported on October 6 that distinct pickup designs make their purposes easier to recognize and that the health and item displays communicate player status. She felt the process worked well and proposed no changes. Her earlier pickup/UI files and local health-bar tests are credited separately from the integrated shared implementation.
+
+### What did not go well
+
+Our visual plan did not establish a shared character interface early enough. Abby's separate project casts to its first-person character, while the shared level uses FactoryCharacter. Her prototype is retained, but its Blueprint HUD and pickups are not integrated into this release. Late or missing handoffs also reduced the time available for integration. Adam's remote hazard branch still contains no new hazard changes at the October 11 fetch; no new Jason handoff was available. The release uses Kevin's working shared hazards. These implementation gaps do not erase earlier planning contributions.
+
+### How earlier feedback changed the game
+
+The instructor asked us to identify the player and purpose, so the game presents a maintenance robot restoring power to escape an abandoned factory. Christian's earlier difficulty finding cells led to larger animated cells and objective guidance. The Beta's industrial props were preserved, and Kevin's final pass improves surface detail, health readability, cell progress, and the finish screen. This keeps the visual work connected to gameplay instead of adding decoration that obscures the route.
+
+### What we would change
+
+Kevin would establish a small style reference and shared player interface before splitting tasks, request an early asset import test, and set checkpoints for actual files rather than status promises. Each handoff should include its source revision, dependencies, scale, and a short test report. That would expose incompatible assets while there is still time to adapt them. This is Kevin's process assessment; Abby reported no requested process changes.
+
+### Tools and techniques
+
+Unreal's material tools and reusable meshes made the small art pass practical. Git branches and packaged downloads identify a testable version. Discord was useful for Christian's visual observations and Abby's health-bar feedback. Separate-project ZIPs were less effective for integration because working local features still depended on a different character. Creating a branch without committed asset changes did not provide a usable handoff. Automated checks cover repeatable game behavior, but human playtests remain necessary for visual clarity and pacing.
+
+### Named contributions
+
+- Kevin Thrush: shared character and camera, stationary and moving hazard implementations, integrated pickups and HUD, map assembly, final surface and interface polish, testing, packaging, coordination, and compiled log.
+- Christian Gulley: wall panel and texture, five pipe models, swinging-hazard model, prior layout and visibility feedback, Beta playtest, and Week 6 art reflection.
+- Abby Mckenzie: separate pickup/UI prototype, updated project files, local health-bar test report, and Week 6 art reflection. Her separate Blueprint implementation is not represented as integrated.
+- Adam Havens: earlier stationary-hazard planning and branch setup; no new hazard implementation available in the remote branch at the final review.
+- Jason Elias: earlier moving-hazard role acceptance; no implementation files available at the final review.
+
+### Verification and limitations
+
+The October 5 editor build and all 18 gameplay state checks passed. The normal-movement automated route collected four cells, reached the exit with 80 health, and passed restart. The rendered polish preview was inspected. On October 11, the final Windows Shipping build succeeded. Its packaged executable passed both the gameplay-state and normal-movement route/restart checks with exit code 0. These final checks ran without graphics to avoid competing with other rendering work; the visual review is from October 5.
+
+The game is a compact prototype with a short route, no audio, and no pause menu. The automated route takes about 21 seconds and is not a first-time human pacing measurement. Abby's Blueprint adaptation remains unfinished. We prioritized a working, testable release over adding unverified features at the deadline.
+
+### Release links
+
+- Source: https://github.com/kptmail-game/GAM305-DigitalGameDev/tree/Final-Release
+- Direct Windows download: https://github.com/kptmail-game/GAM305-DigitalGameDev/releases/download/final-week6/FactoryShift-Final-Windows.zip
+- Shared log: submissions/Module_Six_Project_Log.docx
+- Final release handoff: submissions/Final_Release.docx
+
+Final-Release is the rubric's Final Release branch label with a hyphen because Git does not allow spaces. Each student submits the required document and direct ZIP link in their own Brightspace assignment area.

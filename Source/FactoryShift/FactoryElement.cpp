@@ -66,7 +66,7 @@ void AFactoryElement::Tick(float Dt)
 {
     Super::Tick(Dt); if (bCollected) return;
     Elapsed+=Dt; const float Time=Elapsed+CycleOffset;
-    if (Kind==EFactoryElementKind::Cell)
+    if (Kind==EFactoryElementKind::Cell || Kind==EFactoryElementKind::Health || Kind==EFactoryElementKind::Shield || Kind==EFactoryElementKind::Speed)
     {
         Mesh->SetRelativeLocation(FVector(0,0,8.f*FMath::Sin(Time*2.f)));
         Mesh->SetRelativeRotation(FRotator(0,Time*35.f,0));
